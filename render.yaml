@@ -3,11 +3,10 @@ services:
     name: photo-album-manager
     env: python
     plan: free
-    buildCommand: ./build.sh
+    pythonVersion: 3.11
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input --clear && python manage.py migrate
     startCommand: gunicorn recipe_project.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
       - key: DJANGO_SETTINGS_MODULE
         value: recipe_project.settings
 

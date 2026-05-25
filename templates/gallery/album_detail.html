@@ -3,81 +3,335 @@
 {% block title %}{{ album.name }} - Photo Album Manager{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+<style>
+    .album-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .album-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .album-info {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+    }
+
+    .album-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .upload-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    .upload-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 1.5rem 0;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .upload-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .upload-btn:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .photos-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 2rem 0 1.5rem 0;
+    }
+
+    .photos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .photo-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+    .photo-card:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        transform: translateY(-4px);
+    }
+
+    .photo-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, var(--bg-secondary) 0%, #e5e7eb 100%);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .photo-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .photo-card:hover .photo-image img {
+        transform: scale(1.05);
+    }
+
+    .photo-content {
+        padding: 1rem;
+    }
+
+    .photo-title {
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 0.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    .photo-desc {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        margin: 0 0 0.75rem 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .photo-date {
+        font-size: 0.8rem;
+        color: var(--text-tertiary);
+        margin-bottom: 0.75rem;
+    }
+
+    .photo-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .photo-btn {
+        flex: 1;
+        padding: 0.6rem 0.5rem;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 6px;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .photo-btn-edit {
+        background: #f3f4f6;
+        color: var(--text);
+        border: 1px solid #e5e7eb;
+    }
+
+    .photo-btn-edit:hover {
+        background: #e5e7eb;
+    }
+
+    .photo-btn-delete {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .photo-btn-delete:hover {
+        background: #fecaca;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        border: 2px dashed #d1d5db;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--text-tertiary);
+        margin-bottom: 1rem;
+    }
+
+    .empty-text {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .back-btn {
+        background: #f3f4f6;
+        color: var(--text);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .back-btn:hover {
+        background: #e5e7eb;
+    }
+</style>
+
+<div class="album-header">
     <div>
         <h1>{{ album.name }}</h1>
-        <p style="color: var(--text-light); margin-top: 0.5rem;">{{ album.description }}</p>
-        <p style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">
-            {{ album.photos.count }} photo{{ album.photos.count|pluralize }} • Created {{ album.created_at|date:"M d, Y" }}
-        </p>
+        <div class="album-info">
+            <p>{{ album.description }}</p>
+            <p><strong>{{ album.photos.count }}</strong> photo{{ album.photos.count|pluralize }} • Created {{ album.created_at|date:"M d, Y" }}</p>
+        </div>
     </div>
-    <div style="display: flex; gap: 0.5rem;">
-        <a href="{% url 'album_edit' album.pk %}" class="btn btn-secondary btn-sm">Edit Album</a>
-        <a href="{% url 'album_delete' album.pk %}" class="btn btn-danger btn-sm">Delete Album</a>
+    <div class="album-actions">
+        <a href="{% url 'album_edit' album.pk %}" class="back-btn">Edit</a>
+        <a href="{% url 'album_delete' album.pk %}" class="back-btn" style="background: #fee2e2; color: #991b1b; border-color: #fecaca;">Delete</a>
     </div>
 </div>
 
 <!-- Add Photo Section -->
-<div class="card" style="margin-bottom: 2rem;">
-    <div class="card-header">
-        <h3 style="margin: 0;">Add Photo to Album</h3>
-    </div>
-    <div class="card-body">
-        <form method="POST" action="{% url 'photo_create' %}" enctype="multipart/form-data" style="display: grid; gap: 1.5rem;">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                {{ photo_form.title.label_tag }}
-                {{ photo_form.title }}
-            </div>
-            
-            <div class="form-group">
-                {{ photo_form.description.label_tag }}
-                {{ photo_form.description }}
-            </div>
-            
-            <div class="form-group">
-                {{ photo_form.image.label_tag }}
-                {{ photo_form.image }}
-            </div>
-            
-            <input type="hidden" name="album" value="{{ album.pk }}">
-            
-            <button type="submit" class="btn btn-primary">Upload Photo</button>
-        </form>
-    </div>
+<div class="upload-section">
+    <h3 class="upload-title"><i class="fas fa-cloud-upload-alt" style="margin-right: 0.5rem;"></i>Upload Photo</h3>
+    <form method="POST" action="{% url 'photo_create' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_title">Title</label>
+            {{ photo_form.title }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_description">Description</label>
+            {{ photo_form.description }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_image">Choose Image</label>
+            {{ photo_form.image }}
+        </div>
+        
+        <input type="hidden" name="album" value="{{ album.pk }}">
+        
+        <button type="submit" class="upload-btn"><i class="fas fa-upload"></i> Upload Photo</button>
+    </form>
 </div>
 
-<!-- Photos Grid -->
+<!-- Photos Section -->
 {% if album.photos.all %}
-    <h2 style="margin-bottom: 1.5rem;">Photos</h2>
-    <div class="grid grid-3" style="margin-bottom: 2rem;">
-        {% for photo in album.photos.all %}
-            <div class="card">
-                <div class="img-container">
-                    <a href="{% url 'photo_detail' photo.pk %}">
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
-                    </a>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title">{{ photo.title }}</h3>
-                    <p class="card-subtitle" style="margin-bottom: 0.5rem;">{{ photo.description|truncatewords:10 }}</p>
-                    <p style="font-size: 0.8rem; color: #999; margin-bottom: 1rem;">
-                        {{ photo.uploaded_at|date:"M d, Y" }}
-                    </p>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <a href="{% url 'photo_edit' photo.pk %}" class="btn btn-secondary btn-sm" style="flex: 1;">Edit</a>
-                        <a href="{% url 'photo_delete' photo.pk %}" class="btn btn-danger btn-sm">Delete</a>
+    <div class="photos-section">
+        <h2><i class="fas fa-images"></i> Photos</h2>
+        <div class="photos-grid">
+            {% for photo in album.photos.all %}
+                <div class="photo-card">
+                    <div class="photo-image">
+                        {% if photo.image %}
+                            <a href="{% url 'photo_detail' photo.pk %}" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
+                            </a>
+                        {% else %}
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                                <i class="fas fa-image" style="font-size: 2rem; color: #d1d5db;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="photo-content">
+                        <h4 class="photo-title">{{ photo.title }}</h4>
+                        {% if photo.description %}
+                            <p class="photo-desc">{{ photo.description }}</p>
+                        {% endif %}
+                        <div class="photo-date"><i class="fas fa-calendar"></i> {{ photo.uploaded_at|date:"M d, Y" }}</div>
+                        <div class="photo-actions">
+                            <a href="{% url 'photo_edit' photo.pk %}" class="photo-btn photo-btn-edit"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{% url 'photo_delete' photo.pk %}" class="photo-btn photo-btn-delete"><i class="fas fa-trash"></i> Delete</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% else %}
-    <div style="text-align: center; padding: 3rem; background: var(--card-bg); border-radius: 12px;">
-        <p style="font-size: 1.2rem; color: var(--text-light);">No photos in this album yet. Add your first photo above!</p>
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-inbox"></i>
+        </div>
+        <p class="empty-text">No photos in this album yet. Upload your first photo above!</p>
     </div>
 {% endif %}
 
-<a href="{% url 'album_list' %}" class="btn btn-secondary">Back to Albums</a>
+<div style="margin-top: 2rem;">
+    <a href="{% url 'album_list' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Albums</a>
+</div>
 {% endblock %}

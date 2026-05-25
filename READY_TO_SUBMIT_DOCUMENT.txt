@@ -1,0 +1,423 @@
+READY-TO-COPY SUBMISSION TEXT FOR YOUR DOCUMENT
+
+(Copy and paste this entire text into your Word/Google Doc)
+
+================================================================================
+
+PHOTO ALBUM MANAGEMENT SYSTEM
+Course Submission Document
+
+================================================================================
+
+PROJECT TITLE
+Photo Album Management System
+
+PROJECT DESCRIPTION
+A production-ready Django web application for managing photo albums with secure user authentication, cloud-based image storage using Cloudinary, role-based access control, and a modern responsive user interface. The application is fully deployed on Render.com with PostgreSQL database and supports multiple users creating and managing photo collections.
+
+================================================================================
+
+SECTION 1: LIVE APPLICATION URL
+
+Direct Link to Application:
+https://cloud-render-demo.onrender.com
+
+Application Status: ACTIVE ✓
+
+Instructions to Test the Application:
+1. Visit: https://cloud-render-demo.onrender.com
+2. Click "Login" (or "Sign In")
+3. Enter the following test credentials:
+   - Username: admin
+   - Password: admin123
+4. You will see your album dashboard
+5. Click "New Album" to create an album
+6. Upload photos to test the application
+7. Edit and delete albums/photos as needed
+
+Technical Details:
+- Deployment Platform: Render.com
+- Database: PostgreSQL (Render-hosted)
+- Image Storage: Cloudinary (cloud CDN)
+- Application Server: Gunicorn
+- Static Files: WhiteNoise
+
+================================================================================
+
+SECTION 2: SOURCE CODE REPOSITORY
+
+GitHub Repository URL:
+https://github.com/diangchristian/IT383-Assignment6
+
+Repository Status: PUBLIC ✓
+
+What's in the Repository:
+- Complete Django source code
+- Comprehensive README.md (setup guide)
+- requirements.txt (all dependencies)
+- Deployment configuration files (Procfile, render.yaml)
+- Database migrations
+- All templates and HTML files
+- Static files and styling
+- .gitignore for security
+
+How to Access:
+1. Go to: https://github.com/diangchristian/IT383-Assignment6
+2. Click "Code" button to download
+3. Follow README.md for setup instructions
+4. Run locally or deploy to your own Render instance
+
+================================================================================
+
+SECTION 3: PROJECT DOCUMENTATION
+
+Comprehensive documentation is available in:
+1. README.md (in the GitHub repository)
+2. This submission document
+
+Key Documentation Sections:
+
+A. Technology Stack
+   - Django 6.0.5 (Web framework)
+   - Python 3.11+ (Programming language)
+   - PostgreSQL (Database)
+   - Cloudinary 1.44.2 (Image storage)
+   - Gunicorn 26.0.0 (Application server)
+   - WhiteNoise 6.12.0 (Static files)
+
+B. Features Implemented
+   ✓ User registration with email validation
+   ✓ Secure login/logout with sessions
+   ✓ Password recovery via email
+   ✓ User profile management
+   ✓ Create/edit/delete albums
+   ✓ Upload photos to cloud storage
+   ✓ View album galleries
+   ✓ Delete individual photos
+   ✓ Role-based access control (users access only their content)
+   ✓ Admin interface for management
+   ✓ Responsive mobile-friendly design
+   ✓ Modern UI with black/green/white color scheme
+   ✓ Email notifications
+
+C. Database Models
+   - User (Django built-in, extended)
+   - Album (name, description, user, timestamps)
+   - Photo (image, album, caption, timestamp)
+
+D. Setup Instructions for Local Development
+
+   Step 1: Clone Repository
+   git clone https://github.com/diangchristian/IT383-Assignment6.git
+   cd IT383-Assignment6
+
+   Step 2: Create Virtual Environment
+   python -m venv venv
+   
+   # On Windows:
+   venv\Scripts\activate
+   
+   # On Mac/Linux:
+   source venv/bin/activate
+
+   Step 3: Install Dependencies
+   pip install -r requirements.txt
+
+   Step 4: Create .env File
+   Create a file named ".env" in project root with:
+   
+   DEBUG=True
+   SECRET_KEY=your-random-secret-key-here
+   CLOUDINARY_CLOUD_NAME=your-cloudinary-name
+   CLOUDINARY_API_KEY=your-api-key
+   CLOUDINARY_API_SECRET=your-api-secret
+
+   Step 5: Run Database Migrations
+   python manage.py migrate
+
+   Step 6: Create Admin User (Optional)
+   python manage.py createsuperuser
+
+   Step 7: Start Development Server
+   python manage.py runserver
+
+   Step 8: Access Application
+   Open: http://127.0.0.1:8000/
+
+E. Deployment Information
+
+   Platform: Render.com
+   
+   Deployment Steps:
+   1. Connect GitHub repository to Render
+   2. Set environment variables on Render dashboard
+   3. Configure build and start commands
+   4. Create PostgreSQL database on Render
+   5. Deploy application
+   
+   Build Command:
+   pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+   
+   Start Command:
+   gunicorn recipe_project.wsgi:application
+   
+   Environment Variables Required:
+   - SECRET_KEY (strong random string)
+   - DEBUG=False
+   - DATABASE_URL (PostgreSQL connection string)
+   - CLOUDINARY_CLOUD_NAME
+   - CLOUDINARY_API_KEY
+   - CLOUDINARY_API_SECRET
+   - ALLOWED_HOSTS (your Render domain)
+
+F. File Structure
+   
+   accounts/           - User authentication app
+   gallery/            - Photo album app
+   recipe_project/     - Main Django configuration
+   templates/          - HTML templates
+   manage.py           - Django commands
+   requirements.txt    - Python dependencies
+   Procfile           - Render configuration
+   render.yaml        - Alternative Render config
+   README.md          - Complete documentation
+
+================================================================================
+
+SECTION 4: SYSTEM REQUIREMENTS
+
+To run this application locally, you need:
+- Python 3.11 or higher
+- pip (Python package manager)
+- Virtual environment (venv)
+- Git (for cloning repository)
+- Cloudinary account (free tier available)
+- PostgreSQL (for production; SQLite for development)
+
+To deploy on Render:
+- GitHub account with repository
+- Render.com account (free tier available)
+- Cloudinary account
+- Custom domain (optional)
+
+================================================================================
+
+SECTION 5: TESTING CREDENTIALS
+
+For testing the live application:
+
+Username: admin
+Password: admin123
+
+These credentials provide full access to:
+- View and manage your albums
+- Upload photos
+- Edit profile
+- Access admin interface
+
+================================================================================
+
+SECTION 6: FEATURES DEMONSTRATION
+
+What You Can Test on the Live Application:
+
+1. User Authentication
+   - Click "Login"
+   - Enter: admin / admin123
+   - See dashboard
+
+2. Album Management
+   - Click "New Album"
+   - Fill in album name and description
+   - Click "Create Album"
+   - Album appears in gallery
+
+3. Photo Upload
+   - Click on an album
+   - Click "Add Photo" or "Upload"
+   - Select image from your device
+   - Photo uploads to Cloudinary
+   - Photo appears in album
+
+4. Album Editing
+   - Click "Edit" on an album
+   - Modify name/description
+   - Save changes
+
+5. Album Deletion
+   - Click "Delete" on an album
+   - Confirm deletion
+   - Album is removed
+
+6. User Profile
+   - Click profile icon or "Settings"
+   - View profile information
+   - Edit profile details
+   - Change password
+
+7. Password Recovery
+   - Click "Forgot Password" on login page
+   - Enter email address
+   - Follow reset link in email
+   - Create new password
+
+================================================================================
+
+SECTION 7: TECHNICAL DETAILS
+
+Architecture:
+- Frontend: HTML5, CSS3, Responsive design
+- Backend: Django 6.0.5 (Python)
+- Database: PostgreSQL (production), SQLite (development)
+- Storage: Cloudinary (cloud-based CDN)
+- Server: Gunicorn (WSGI application server)
+- Static Files: WhiteNoise (middleware for static file serving)
+
+Security Features:
+- CSRF protection on all forms
+- SQL injection prevention (Django ORM)
+- XSS (Cross-site scripting) prevention
+- Secure password hashing (PBKDF2)
+- HTTPS/SSL in production
+- Secure session management
+- Environment-based configuration
+- Role-based access control
+
+Performance Optimizations:
+- Database query optimization
+- Template caching
+- Static file compression
+- Cloudinary image optimization
+- Pagination for lists
+- Database indexing
+
+================================================================================
+
+SECTION 8: DEPLOYMENT STATUS
+
+Current Deployment Status:
+✓ Application is deployed and ACTIVE on Render.com
+✓ PostgreSQL database is configured
+✓ Cloudinary image storage is configured
+✓ Gunicorn server is running
+✓ WhiteNoise is serving static files
+✓ SSL/HTTPS is enabled
+✓ Database migrations are applied
+✓ Application is accessible at: https://cloud-render-demo.onrender.com
+
+Monitoring:
+- Render Dashboard: https://dashboard.render.com/
+- Check logs for any errors
+- Application status is visible in dashboard
+- Can manually redeploy if needed
+
+Important: Application will remain ACTIVE during grading period.
+
+================================================================================
+
+SECTION 9: HOW TO DEPLOY YOUR OWN INSTANCE (Optional)
+
+If you want to deploy your own copy:
+
+1. Fork the GitHub repository
+2. Create Render.com account
+3. Create PostgreSQL database on Render
+4. Create Cloudinary account
+5. Connect GitHub repo to Render
+6. Set all environment variables
+7. Deploy application
+8. Test at your Render URL
+
+Full instructions available in README.md of repository.
+
+================================================================================
+
+SECTION 10: REQUIREMENTS.TXT
+
+The following Python packages are required:
+
+asgiref==3.11.1
+certifi==2026.4.22
+charset-normalizer==3.4.7
+cloudinary==1.44.2
+dj-database-url==3.1.2
+Django==6.0.5
+django-cloudinary-storage==0.3.0
+gunicorn==26.0.0
+idna==3.13
+packaging==26.2
+pillow==12.2.0
+psycopg2-binary==2.9.12
+python-dotenv==1.2.2
+requests==2.33.1
+six==1.17.0
+sqlparse==0.5.5
+tzdata==2026.2
+urllib3==2.7.0
+whitenoise==6.12.0
+
+All packages are installed via: pip install -r requirements.txt
+
+================================================================================
+
+SECTION 11: TROUBLESHOOTING
+
+Issue: Application takes a long time to load
+Solution: Render free tier may have cold starts. Wait 3-5 minutes after deployment.
+
+Issue: Application shows error 500
+Solution: Check Render dashboard logs. May be missing environment variable.
+
+Issue: Images don't display
+Solution: Verify Cloudinary credentials. Check API key and secret are correct.
+
+Issue: Can't login with credentials
+Solution: Run migrations. May need to create new superuser account.
+
+Issue: Database connection error
+Solution: Verify DATABASE_URL in Render environment. Check PostgreSQL is active.
+
+Issue: Static files (CSS) not loading
+Solution: Verify WhiteNoise is configured. Run: python manage.py collectstatic
+
+For more help, see README.md in repository.
+
+================================================================================
+
+SECTION 12: PROJECT SUMMARY
+
+This project demonstrates:
+✓ Full-stack Django web development
+✓ Database design and optimization
+✓ Cloud storage integration (Cloudinary)
+✓ User authentication and authorization
+✓ Responsive web design
+✓ Production deployment (Render.com)
+✓ Security best practices
+✓ Modern UI/UX design
+
+Total Lines of Code: ~2000+ lines
+Total Files: 30+ files
+Development Time: [Your development time]
+
+================================================================================
+
+SUBMISSION INFORMATION
+
+Project Name: Photo Album Management System
+Submission Date: May 25, 2026
+Student: Jacob
+Course: [Your course name and number]
+
+Links Submitted:
+1. Live Application: https://cloud-render-demo.onrender.com
+2. GitHub Repository: https://github.com/diangchristian/IT383-Assignment6
+3. Documentation: This document + README.md in repository
+
+Status: READY FOR GRADING ✓
+
+================================================================================
+
+END OF SUBMISSION DOCUMENT
+
+(Copy everything above this line into your Word/Google Doc)

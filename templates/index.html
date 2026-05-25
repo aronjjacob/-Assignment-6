@@ -1,69 +1,135 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Welcome - Photo Album Manager{% endblock %}
+{% block title %}Welcome - PhotoAlbum{% endblock %}
 
 {% block content %}
-<section style="text-align: center; padding: 4rem 0;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Welcome to Photo Album</h1>
-    <p style="font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 3rem;">
-        Organize, manage, and share your photos with ease. A beautiful, secure photo management platform built for creators.
-    </p>
-    
-    {% if user.is_authenticated %}
-        <div class="btn-group" style="justify-content: center; margin-bottom: 3rem;">
-            <a href="{% url 'album_list' %}" class="btn btn-primary btn-lg"><i class="fas fa-images"></i> View Albums</a>
-            <a href="{% url 'album_create' %}" class="btn btn-success btn-lg"><i class="fas fa-plus"></i> New Album</a>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
-            <div class="card">
-                <div class="card-body" style="text-align: center;">
-                    <div style="font-size: 3rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">{{ user.albums.count }}</div>
-                    <div style="font-weight: 600; color: var(--text-light);">Albums Created</div>
+{% if user.is_authenticated %}
+    <div class="text-center mb-4">
+        <h1>Welcome back, <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">{{ user.first_name|default:user.username }}</span></h1>
+        <p style="font-size: 1.1rem; color: var(--text-secondary);">Organize and manage your photo collections with ease</p>
+    </div>
+
+    <div class="grid grid-2 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem;">
+                    {{ user.albums.count }}
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body" style="text-align: center;">
-                    <div style="font-size: 3rem; color: var(--success); margin-bottom: 0.5rem; font-weight: 700;">{{ user.photos.count }}</div>
-                    <div style="font-weight: 600; color: var(--text-light);">Photos Uploaded</div>
-                </div>
+                <div style="font-weight: 600; color: var(--text-secondary); font-size: 1rem;">Albums Created</div>
+                <p style="color: var(--text-tertiary); margin-top: 0.5rem;">Organize your memories</p>
             </div>
         </div>
-    {% else %}
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 3rem; font-weight: 800; color: var(--success); margin-bottom: 0.5rem;">
+                    {{ user.photos.count }}
+                </div>
+                <div style="font-weight: 600; color: var(--text-secondary); font-size: 1rem;">Photos Uploaded</div>
+                <p style="color: var(--text-tertiary); margin-top: 0.5rem;">Cloud-stored & optimized</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group text-center" style="justify-content: center; margin: 3rem 0;">
+        <a href="{% url 'album_list' %}" class="btn btn-primary btn-lg"><i class="fas fa-images"></i> View All Albums</a>
+        <a href="{% url 'album_create' %}" class="btn btn-secondary btn-lg"><i class="fas fa-plus-circle"></i> Create Album</a>
+    </div>
+
+{% else %}
+    <!-- Hero Section -->
+    <section style="text-align: center; padding: 4rem 2rem 3rem;">
+        <h1 style="font-size: 3.5rem; line-height: 1.2; margin-bottom: 1rem;">
+            Your Photos,
+            <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Beautifully Organized
+            </span>
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.8;">
+            Create albums, upload photos to the cloud, and manage your memories with an elegant, secure platform built for creators.
+        </p>
+
         <div class="btn-group" style="justify-content: center; margin-bottom: 4rem;">
-            <a href="{% url 'register' %}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> Get Started</a>
-            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> Get Started Free</a>
+            <a href="{% url 'login' %}" class="btn btn-outline btn-lg"><i class="fas fa-sign-in-alt"></i> Sign In</a>
         </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section style="margin: 3rem 0;">
+        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2rem;">Why Choose PhotoAlbum?</h2>
         
-        <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 700px; margin: 0 auto; text-align: left;">
-            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-star" style="color: var(--warning); margin-right: 0.5rem;"></i>Features</h2>
-            <ul style="list-style: none; display: grid; grid-template-columns: 1fr; gap: 1rem;">
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Create and organize unlimited albums</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-cloud-upload-alt" style="color: var(--info); font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Upload high-quality photos with Cloudinary CDN</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-lock" style="color: var(--danger); font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Role-based access control & secure authentication</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-edit" style="color: var(--primary); font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Edit and delete photos with ease</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-search" style="color: #8b5cf6; font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Organize photos across multiple albums</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
-                    <i class="fas fa-rocket" style="color: #ec4899; font-size: 1.3rem; flex-shrink: 0;"></i>
-                    <span>Production-ready with PostgreSQL & Render</span>
-                </li>
-            </ul>
+        <div class="grid grid-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-images" style="color: var(--primary);"></i>
+                    </div>
+                    <h4>Unlimited Albums</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Create and organize as many albums as you need for all your memories</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-cloud-upload-alt" style="color: var(--info);"></i>
+                    </div>
+                    <h4>Cloud Storage</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Powered by Cloudinary CDN for fast, reliable photo hosting worldwide</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-lock" style="color: var(--danger);"></i>
+                    </div>
+                    <h4>Secure & Private</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Enterprise-grade security with role-based access control</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-edit" style="color: var(--secondary);"></i>
+                    </div>
+                    <h4>Easy Editing</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Edit and manage photos with an intuitive, user-friendly interface</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-zap" style="color: var(--warning);"></i>
+                    </div>
+                    <h4>Lightning Fast</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Optimized photos with automatic responsive image generation</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-mobile-alt" style="color: var(--accent);"></i>
+                    </div>
+                    <h4>Mobile Ready</h4>
+                    <p style="margin: 1rem 0 0; color: var(--text-secondary);">Fully responsive design works perfectly on all devices</p>
+                </div>
+            </div>
         </div>
-    {% endif %}
-</section>
+    </section>
+
+    <!-- Call to Action -->
+    <section style="text-align: center; padding: 4rem 2rem; margin-top: 3rem;">
+        <div class="card">
+            <div class="card-body">
+                <h2>Ready to start organizing?</h2>
+                <p style="font-size: 1.1rem; color: var(--text-secondary); margin: 1rem 0 2rem;">Join thousands of creators using PhotoAlbum</p>
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right"></i> Create Your Account</a>
+            </div>
+        </div>
+    </section>
+{% endif %}
 {% endblock %}

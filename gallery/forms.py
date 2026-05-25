@@ -21,7 +21,7 @@ class AlbumForm(forms.ModelForm):
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
-        fields = ['title', 'description', 'image', 'album']
+        fields = ['title', 'description', 'image']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control', 
@@ -30,14 +30,12 @@ class PhotoForm(forms.ModelForm):
             'description': forms.Textarea(attrs={
                 'class': 'form-control', 
                 'rows': 3,
-                'placeholder': 'Photo Description'
+                'placeholder': 'Photo Description (optional)'
             }),
             'image': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
-            }),
-            'album': forms.Select(attrs={
-                'class': 'form-control'
+                'accept': 'image/*',
+                'required': True
             }),
         }
     
@@ -45,4 +43,4 @@ class PhotoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Filter albums to only show those owned by the current user
         if user:
-            self.fields['album'].queryset = Album.objects.filter(owner=user)
+            self.fields.pop('album', None)  # Remove album field from form

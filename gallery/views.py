@@ -112,11 +112,19 @@ class PhotoCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        # Verify user owns the selected album
-        album = form.instance.album
-        if album.owner != self.request.user:
-            messages.error(self.request, 'You do not have permission to add photos to this album.')
-            return self.form_invalid(form)
+        # Get album from POST data (hidden input)
+        album_id = self.request.POST.get('album')
+        if album_id:
+            try:
+                album = Album.objects.get(pk=album_id)
+                # Verify user owns the selected album
+                if album.owner != self.request.user:
+                    messages.error(self.request, 'You do not have permission to add photos to this album.')
+                    return self.form_invalid(form)
+                form.instance.album = album
+            except Album.DoesNotExist:
+                messages.error(self.request, 'Album not found.')
+                return self.form_invalid(form)
         messages.success(self.request, 'Photo uploaded successfully!')
         return super().form_valid(form)
     

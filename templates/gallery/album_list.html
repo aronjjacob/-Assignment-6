@@ -1,41 +1,321 @@
 {% extends 'base/base.html' %}
 
-{% block title %}My Albums - Photo Album Manager{% endblock %}
+{% block title %}My Albums - PhotoAlbum{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
-    <h1><i class="fas fa-folder-open" style="margin-right: 0.5rem;"></i>My Albums</h1>
-    <a href="{% url 'album_create' %}" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i> New Album</a>
+<style>
+    .albums-header {
+        margin-bottom: 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .albums-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .albums-header p {
+        color: var(--text-secondary);
+        margin: 0.5rem 0 0 0;
+        font-size: 0.95rem;
+    }
+
+    .btn-new-album {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-new-album:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .albums-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .album-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e5e7eb;
+    }
+
+    .album-card:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        transform: translateY(-4px);
+    }
+
+    .album-cover {
+        height: 160px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .album-cover-link {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .photo-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+    }
+
+    .album-content {
+        padding: 1.25rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .album-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .album-title a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .album-title a:hover {
+        color: var(--primary);
+    }
+
+    .album-description {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin: 0 0 0.75rem 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .album-no-desc {
+        color: var(--text-tertiary);
+        font-size: 0.9rem;
+        font-style: italic;
+        margin: 0 0 0.75rem 0;
+    }
+
+    .album-date {
+        font-size: 0.85rem;
+        color: var(--text-tertiary);
+        margin-top: auto;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .album-date i {
+        margin-right: 0.4rem;
+    }
+
+    .album-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .album-actions a {
+        flex: 1;
+        padding: 0.6rem;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        border: 1px solid transparent;
+    }
+
+    .btn-view {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-view:hover {
+        background: var(--primary-dark);
+    }
+
+    .btn-edit {
+        background: #f3f4f6;
+        color: var(--text);
+        border: 1px solid #e5e7eb;
+    }
+
+    .btn-edit:hover {
+        background: #e5e7eb;
+    }
+
+    .btn-delete {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .btn-delete:hover {
+        background: #fecaca;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        border: 2px dashed #d1d5db;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        color: var(--text-tertiary);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .empty-state .btn-new-album {
+        display: inline-flex;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .pagination a,
+    .pagination span {
+        padding: 0.6rem 0.85rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .pagination a {
+        background: white;
+        color: var(--primary);
+        border: 1px solid #e5e7eb;
+    }
+
+    .pagination a:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .pagination span {
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+    }
+</style>
+
+<div class="albums-header">
+    <div>
+        <h1><i class="fas fa-images"></i> My Albums</h1>
+        <p>Organize and manage your photo collections</p>
+    </div>
+    <a href="{% url 'album_create' %}" class="btn-new-album"><i class="fas fa-plus"></i> New Album</a>
 </div>
 
 {% if albums %}
-    <div class="grid grid-3">
+    <div class="albums-grid">
         {% for album in albums %}
-            <div class="card">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 180px; display: flex; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden;">
-                    <div style="font-size: 4rem; opacity: 0.8;"><i class="fas fa-images"></i></div>
-                    <div style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(0,0,0,0.3); color: white; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">
+            <div class="album-card">
+                <div class="album-cover">
+                    <a href="{% url 'album_detail' album.pk %}" class="album-cover-link">
+                        <i class="fas fa-images"></i>
+                    </a>
+                    <div class="photo-badge">
                         <i class="fas fa-image"></i> {{ album.photos.count }}
                     </div>
                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">
-                        <a href="{% url 'album_detail' album.pk %}" style="color: inherit; text-decoration: none;">{{ album.name }}</a>
+                <div class="album-content">
+                    <h3 class="album-title">
+                        <a href="{% url 'album_detail' album.pk %}">{{ album.name }}</a>
                     </h3>
                     {% if album.description %}
-                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0.75rem 0; line-height: 1.5;">
-                            {{ album.description|truncatewords:15 }}
-                        </p>
+                        <p class="album-description">{{ album.description }}</p>
+                    {% else %}
+                        <p class="album-no-desc">No description</p>
                     {% endif %}
-                    <p style="font-size: 0.85rem; color: var(--text-lighter); margin-top: 1rem;">
-                        <i class="fas fa-calendar-alt"></i> {{ album.created_at|date:"M d, Y" }}
+                    <p class="album-date">
+                        <i class="fas fa-calendar"></i> {{ album.created_at|date:"M d, Y" }}
                     </p>
-                </div>
-                <div class="card-footer">
-                    <div class="btn-group">
-                        <a href="{% url 'album_detail' album.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a>
-                        <a href="{% url 'album_edit' album.pk %}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="{% url 'album_delete' album.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+                    <div class="album-actions">
+                        <a href="{% url 'album_detail' album.pk %}" class="btn-view"><i class="fas fa-eye"></i> View</a>
+                        <a href="{% url 'album_edit' album.pk %}" class="btn-edit"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{% url 'album_delete' album.pk %}" class="btn-delete"><i class="fas fa-trash"></i> Delete</a>
                     </div>
                 </div>
             </div>
@@ -45,22 +325,26 @@
     {% if is_paginated %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?page=1"><i class="fas fa-chevron-left"></i> First</a>
-                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a href="?page=1" title="First page"><i class="fas fa-chevron-left"></i></a>
+                <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
             {% endif %}
             
-            <span style="padding: 0.5rem 0.75rem;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            <span>{{ page_obj.number }}</span>
             
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-chevron-right"></i></a>
+                <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" title="Last page"><i class="fas fa-chevron-right"></i></a>
             {% endif %}
         </div>
     {% endif %}
 {% else %}
-    <div style="text-align: center; padding: 3rem; background: var(--card-bg); border-radius: 12px;">
-        <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 1rem;">You haven't created any albums yet.</p>
-        <a href="{% url 'album_create' %}" class="btn btn-primary">Create Your First Album</a>
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fas fa-inbox"></i>
+        </div>
+        <h3>No albums yet</h3>
+        <p>Create your first album to start organizing your photos</p>
+        <a href="{% url 'album_create' %}" class="btn-new-album"><i class="fas fa-plus"></i> Create Album</a>
     </div>
 {% endif %}
 {% endblock %}

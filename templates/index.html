@@ -1,0 +1,69 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Welcome - Photo Album Manager{% endblock %}
+
+{% block content %}
+<section style="text-align: center; padding: 4rem 0;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Welcome to Photo Album</h1>
+    <p style="font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 3rem;">
+        Organize, manage, and share your photos with ease. A beautiful, secure photo management platform built for creators.
+    </p>
+    
+    {% if user.is_authenticated %}
+        <div class="btn-group" style="justify-content: center; margin-bottom: 3rem;">
+            <a href="{% url 'album_list' %}" class="btn btn-primary btn-lg"><i class="fas fa-images"></i> View Albums</a>
+            <a href="{% url 'album_create' %}" class="btn btn-success btn-lg"><i class="fas fa-plus"></i> New Album</a>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
+            <div class="card">
+                <div class="card-body" style="text-align: center;">
+                    <div style="font-size: 3rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">{{ user.albums.count }}</div>
+                    <div style="font-weight: 600; color: var(--text-light);">Albums Created</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body" style="text-align: center;">
+                    <div style="font-size: 3rem; color: var(--success); margin-bottom: 0.5rem; font-weight: 700;">{{ user.photos.count }}</div>
+                    <div style="font-weight: 600; color: var(--text-light);">Photos Uploaded</div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="btn-group" style="justify-content: center; margin-bottom: 4rem;">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </div>
+        
+        <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 700px; margin: 0 auto; text-align: left;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-star" style="color: var(--warning); margin-right: 0.5rem;"></i>Features</h2>
+            <ul style="list-style: none; display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Create and organize unlimited albums</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-cloud-upload-alt" style="color: var(--info); font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Upload high-quality photos with Cloudinary CDN</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-lock" style="color: var(--danger); font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Role-based access control & secure authentication</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-edit" style="color: var(--primary); font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Edit and delete photos with ease</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-search" style="color: #8b5cf6; font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Organize photos across multiple albums</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px;">
+                    <i class="fas fa-rocket" style="color: #ec4899; font-size: 1.3rem; flex-shrink: 0;"></i>
+                    <span>Production-ready with PostgreSQL & Render</span>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

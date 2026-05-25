@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ photo.title }} - Photo Album Manager{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="img-container" style="max-height: 500px;">
+        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+    <div class="card-body">
+        <h1>{{ photo.title }}</h1>
+        <p style="color: var(--text-light); margin-top: 0.5rem; margin-bottom: 1rem;">
+            Album: <a href="{% url 'album_detail' photo.album.pk %}">{{ photo.album.name }}</a>
+        </p>
+        
+        {% if photo.description %}
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h3 style="margin-top: 0;">Description</h3>
+                <p>{{ photo.description }}</p>
+            </div>
+        {% endif %}
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+            <div>
+                <div style="font-size: 0.9rem; color: var(--text-light);">Uploaded</div>
+                <div style="font-weight: bold;">{{ photo.uploaded_at|date:"M d, Y" }}</div>
+            </div>
+            <div>
+                <div style="font-size: 0.9rem; color: var(--text-light);">Last Updated</div>
+                <div style="font-weight: bold;">{{ photo.updated_at|date:"M d, Y" }}</div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="{% url 'photo_edit' photo.pk %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'photo_delete' photo.pk %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'album_detail' photo.album.pk %}" class="btn btn-secondary">Back to Album</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

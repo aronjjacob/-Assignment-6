@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block title %}My Albums - Photo Album Manager{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
+    <h1><i class="fas fa-folder-open" style="margin-right: 0.5rem;"></i>My Albums</h1>
+    <a href="{% url 'album_create' %}" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i> New Album</a>
+</div>
+
+{% if albums %}
+    <div class="grid grid-3">
+        {% for album in albums %}
+            <div class="card">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 180px; display: flex; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 4rem; opacity: 0.8;"><i class="fas fa-images"></i></div>
+                    <div style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(0,0,0,0.3); color: white; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">
+                        <i class="fas fa-image"></i> {{ album.photos.count }}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{% url 'album_detail' album.pk %}" style="color: inherit; text-decoration: none;">{{ album.name }}</a>
+                    </h3>
+                    {% if album.description %}
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0.75rem 0; line-height: 1.5;">
+                            {{ album.description|truncatewords:15 }}
+                        </p>
+                    {% endif %}
+                    <p style="font-size: 0.85rem; color: var(--text-lighter); margin-top: 1rem;">
+                        <i class="fas fa-calendar-alt"></i> {{ album.created_at|date:"M d, Y" }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <a href="{% url 'album_detail' album.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a>
+                        <a href="{% url 'album_edit' album.pk %}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{% url 'album_delete' album.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1"><i class="fas fa-chevron-left"></i> First</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            
+            <span style="padding: 0.5rem 0.75rem;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-chevron-right"></i></a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div style="text-align: center; padding: 3rem; background: var(--card-bg); border-radius: 12px;">
+        <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 1rem;">You haven't created any albums yet.</p>
+        <a href="{% url 'album_create' %}" class="btn btn-primary">Create Your First Album</a>
+    </div>
+{% endif %}
+{% endblock %}

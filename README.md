@@ -203,7 +203,7 @@ This project is open source and available under the MIT License.
 
 ## Author
 
-Created by Jacob Aronson
+Created by Aron Jacob Masecampo
 
 ## Support
 

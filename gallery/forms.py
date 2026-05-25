@@ -41,6 +41,4 @@ class PhotoForm(forms.ModelForm):
     
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filter albums to only show those owned by the current user
-        if user:
-            self.fields.pop('album', None)  # Remove album field from form
+        # Album field is passed via hidden input in the template, not in the form

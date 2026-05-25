@@ -111,22 +111,32 @@ class PhotoCreateView(LoginRequiredMixin, CreateView):
         return kwargs
     
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-        # Get album from POST data (hidden input)
-        album_id = self.request.POST.get('album')
-        if album_id:
-            try:
-                album = Album.objects.get(pk=album_id)
-                # Verify user owns the selected album
-                if album.owner != self.request.user:
-                    messages.error(self.request, 'You do not have permission to add photos to this album.')
+        try:
+            form.instance.owner = self.request.user
+            # Get album from POST data (hidden input)
+            album_id = self.request.POST.get('album')
+            if album_id:
+                try:
+                    album = Album.objects.get(pk=album_id)
+                    # Verify user owns the selected album
+                    if album.owner != self.request.user:
+                        messages.error(self.request, 'You do not have permission to add photos to this album.')
+                        return self.form_invalid(form)
+                    form.instance.album = album
+                except Album.DoesNotExist:
+                    messages.error(self.request, 'Album not found.')
                     return self.form_invalid(form)
-                form.instance.album = album
-            except Album.DoesNotExist:
-                messages.error(self.request, 'Album not found.')
+            else:
+                messages.error(self.request, 'Album is required.')
                 return self.form_invalid(form)
-        messages.success(self.request, 'Photo uploaded successfully!')
-        return super().form_valid(form)
+            
+            messages.success(self.request, 'Photo uploaded successfully!')
+            return super().form_valid(form)
+        except Exception as e:
+            messages.error(self.request, f'Error uploading photo: {str(e)}')
+            import traceback
+            print(f"Photo upload error: {traceback.format_exc()}")
+            return self.form_invalid(form)
     
     def get_success_url(self):
         return reverse_lazy('album_detail', kwargs={'pk': self.object.album.pk})
